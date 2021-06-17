@@ -12,7 +12,6 @@ function MyComponent() {
       map.locate();
     },
     locationfound: (location) => {
-      console.log("location found:", location);
       map.flyTo([location.latitude, location.longitude], 18);
     },
   });

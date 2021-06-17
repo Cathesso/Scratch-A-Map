@@ -1,7 +1,6 @@
 //import {Switch, Route} from "react-router-dom";
 import ExplorePage from "./pages/ExplorePage";
 import styled from "styled-components/macro";
-import "./css/App.css";
 
 function App() {
   return (

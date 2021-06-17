@@ -1,4 +1,4 @@
-FROM openjdk:16
+FROM openjdk:15
 
 MAINTAINER Harro Fabian Fromme <h-f.fromme@posteo.de>
 

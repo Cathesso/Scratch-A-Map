@@ -55,10 +55,3 @@ const Wrapper = styled.div`
   margin: 0;
   width: 100vw;
 `;
-
-const styles = {
-  // this group of buttons will be aligned to the right side
-  toolbarButtons: {
-    marginLeft: "auto",
-  },
-};

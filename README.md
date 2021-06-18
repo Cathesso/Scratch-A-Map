@@ -9,6 +9,8 @@ Live version: http://scratchamap.herokuapp.com/login
 - Axios
 - JWT-Decode
 - Styled-Components
+- leaflet
+- react-leaflet
 
 ### Backend:
 - Maven

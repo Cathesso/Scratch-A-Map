@@ -3,7 +3,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ExploreIcon from "@material-ui/icons/Explore";
 import {
   AppBar,
-  Button,
   IconButton,
   makeStyles,
   Toolbar,
@@ -16,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
   center: {
     flexGrow: 1,
+    textAlign: "center",
   },
 }));
 
@@ -34,7 +34,9 @@ export default function Header() {
           >
             <MenuIcon />
           </IconButton>
-          <div className={classes.center} />
+          <Typography variant="h5" component="h2" className={classes.center}>
+            Scratch-A-Map
+          </Typography>
           <IconButton
             edge="end"
             href="/explore"

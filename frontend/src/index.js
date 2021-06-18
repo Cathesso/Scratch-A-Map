@@ -4,21 +4,41 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createGlobalStyle } from "styled-components";
 import { BrowserRouter as Router } from "react-router-dom";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 
 const GlobalStyle = createGlobalStyle`
-  body {
+  body, #root{
     margin: 0;
     height: 100vh;
     width: 100vw;
   }
 `;
 
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: "#cfff95",
+      main: "#9ccc65",
+      dark: "#6b9b37",
+      contrastText: "#ffffff",
+    },
+    secondary: {
+      light: "#67daff",
+      main: "#03a9f4",
+      dark: "#007ac1",
+      contrastText: "#ffffff",
+    },
+  },
+});
+
 ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
-    <Router>
-      <App />
-    </Router>
+    <ThemeProvider theme={theme}>
+      <Router>
+        <App />
+      </Router>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

@@ -3,26 +3,22 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createGlobalStyle } from "styled-components";
+import { BrowserRouter as Router } from "react-router-dom";
 
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
     height: 100vh;
     width: 100vw;
-    color: white;
   }
-  .App {
-    height: 10vh;
-    width: 100vw;
-    background-color: hotpink;
-    text-align: center;
-    }
 `;
 
 ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
-    <App />
+    <Router>
+      <App />
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );

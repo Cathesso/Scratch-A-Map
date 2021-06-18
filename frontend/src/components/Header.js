@@ -1,10 +1,62 @@
 import styled from "styled-components/macro";
+import MenuIcon from "@material-ui/icons/Menu";
+import ExploreIcon from "@material-ui/icons/Explore";
+import {
+  AppBar,
+  Button,
+  IconButton,
+  makeStyles,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  center: {
+    flexGrow: 1,
+  },
+}));
 
 export default function Header() {
-  return <Wrapper>HEADER</Wrapper>;
+  const classes = useStyles();
+  return (
+    <Wrapper>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            href="/"
+            color="inherit"
+            aria-label="menu"
+            fontSize="large"
+          >
+            <MenuIcon />
+          </IconButton>
+          <div className={classes.center} />
+          <IconButton
+            edge="end"
+            href="/explore"
+            color="inherit"
+            aria-label="map"
+          >
+            <ExploreIcon fontSize="large" />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+    </Wrapper>
+  );
 }
 
 const Wrapper = styled.div`
   margin: 0;
-  background-color: hotpink;
+  width: 100vw;
 `;
+
+const styles = {
+  // this group of buttons will be aligned to the right side
+  toolbarButtons: {
+    marginLeft: "auto",
+  },
+};

@@ -21,7 +21,6 @@ public class MapDataController {
 
     @GetMapping("getmarkers")
     public List<Marker> getMarkers(@RequestParam String sWLat, String sWLon, String nELat, String nELon){
-        System.out.println("DINGDINGDING");
         return mapDataService.getMarkers(sWLat,sWLon,nELat,nELon);
     }
 

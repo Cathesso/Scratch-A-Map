@@ -27,11 +27,7 @@ export default function StreetMap() {
 
   useEffect(() => {
     if (userBounds !== "") {
-      getMarkers();
-    }
-  }, [userBounds]);
-
-  function getMarkers() {
+      function getMarkers() {
     axios
       .get(
         `/mapdata/getmarkers?sWLat=` +
@@ -55,6 +51,10 @@ export default function StreetMap() {
       .then(setMarkers)
       .catch((error) => console.log(error));
   }
+    }
+  }, [userBounds]);
+
+
 
   function PlayerController() {
     const map = useMapEvents({

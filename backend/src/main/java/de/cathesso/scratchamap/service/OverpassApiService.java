@@ -24,7 +24,6 @@ public class OverpassApiService {
     public List<OverpassApiElement> getMapElements(String sWLat, String sWLon, String nELat, String nELon) {
 
         String requestString = overpassApi + "[out:json][timeout:25];(way[\"highway\"][\"highway\"!=\"motorway\"][\"highway\"!=\"motorway_link\"][\"highway\"!=\"primary\"][\"highway\"!=\"service\"][\"foot\"!=\"no\"][\"access\"!=\"private\"][\"access\"!=\"no\"](" + sWLat + "," + sWLon + "," + nELat + "," + nELon + ");>;);out qt;";
-        System.out.println(requestString);
         ResponseEntity<GetMapElementsDTO> response = restTemplate.getForEntity(requestString, GetMapElementsDTO.class);
         if (response.getBody() != null) {
             return response.getBody().getElements();

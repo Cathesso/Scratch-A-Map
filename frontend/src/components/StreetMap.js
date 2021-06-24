@@ -29,7 +29,7 @@ export default function StreetMap() {
     if (userBounds !== "") {
       getMarkers();
     }
-  }, [userBounds]);
+  }, [userBounds]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function getMarkers() {
     axios

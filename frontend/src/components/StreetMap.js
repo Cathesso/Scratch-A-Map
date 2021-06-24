@@ -1,8 +1,6 @@
 import {
   MapContainer,
-  Marker,
   TileLayer,
-  useMap,
   useMapEvents,
 } from "react-leaflet";
 import styled from "styled-components/macro";
@@ -25,7 +23,7 @@ export default function StreetMap() {
   let userMarker = new L.marker([27.380583, 33.631839], { icon: userIcon });
   const [markers, setMarkers] = useState([]);
   const [userBounds, setUserBounds] = useState("");
-  const [userIsWithinBounds, setUserIsWithinBounds] = useState(false);
+  //const [userIsWithinBounds, setUserIsWithinBounds] = useState(false);
 
   useEffect(() => {
     if (userBounds !== "") {

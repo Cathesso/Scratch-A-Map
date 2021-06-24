@@ -59,7 +59,6 @@ export default function StreetMap() {
   function PlayerController() {
     const map = useMapEvents({
       click: () => {
-        //ToDo: Has to be changed to a timer
         map.locate(); //Finds User via Browser's built-in functions
       },
       locationfound: (userLocation) => {

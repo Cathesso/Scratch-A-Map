@@ -19,7 +19,7 @@ public class MapDataController {
     @Autowired
     public MapDataController(MapDataService mapDataService){this.mapDataService = mapDataService;}
 
-    @GetMapping("getmarkers")
+    @GetMapping("getnodes")
     public List<Marker> getMarkers(@RequestParam String sWLat, String sWLon, String nELat, String nELon){
         return mapDataService.getMarkers(sWLat,sWLon,nELat,nELon);
     }

@@ -40,7 +40,6 @@ public class OverpassApiService {
     }
 
     public List<Marker> getMapNodes(String sWLat, String sWLon, String nELat, String nELon){
-        List<Marker> Nodes = getMapElements(sWLat, sWLon, nELat, nELon).stream().filter(element -> element.getType().equals("node")).map(this::mapOverpassNodesToMarkerModel).collect(Collectors.toList());
-        return Nodes;
+        return getMapElements(sWLat, sWLon, nELat, nELon).stream().filter(element -> element.getType().equals("node")).map(this::mapOverpassNodesToMarkerModel).collect(Collectors.toList());
     }
 }

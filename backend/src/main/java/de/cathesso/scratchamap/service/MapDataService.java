@@ -22,7 +22,6 @@ public class MapDataService {
     public List<Marker> getMarkers(String sWLat, String sWLon, String nELat, String nELon){
         //Explanation: Nodes are all points from Overpass. Markers are all points that are to be shown (Overpass + future own generated points).
         return apiService.getMapNodes(sWLat, sWLon, nELat, nELon);
-        //ToDo: Add own points for case: Way consists only of beginning and end --> Add point in middle.
     }
 
 }

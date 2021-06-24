@@ -17,5 +17,4 @@ public class Marker {
     private String id;
     private String latitude;
     private String longitude;
-    //private String type; <- To be added later. Information to be extracted from Tags (Streetlight etc.)
 }

@@ -3,19 +3,26 @@ import ExplorePage from "./pages/ExplorePage";
 import styled from "styled-components/macro";
 import LoginPage from "./pages/LoginPage";
 import Header from "./components/Header";
+import AuthProvider from "./context/AuthProvider";
+import HomePage from "./pages/HomePage";
 
 function App() {
   return (
     <Wrapper>
-      <Header />
-      <Switch>
-        <Route path={"/"} exact>
-          <LoginPage />
-        </Route>
-        <Route path={"/explore"} exact>
-          <ExplorePage />
-        </Route>
-      </Switch>
+      <AuthProvider>
+        <Header />
+        <Switch>
+          <Route path={"/"} exact>
+            <LoginPage />
+          </Route>
+          <Route path={"/home"} exact>
+            <HomePage />
+          </Route>
+          <Route path={"/explore"} exact>
+            <ExplorePage />
+          </Route>
+        </Switch>
+      </AuthProvider>
     </Wrapper>
   );
 }

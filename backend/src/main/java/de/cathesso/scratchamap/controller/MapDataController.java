@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/mapdata")
+@RequestMapping("/api/mapdata")
 public class MapDataController {
 
     private final MapDataService mapDataService;

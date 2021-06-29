@@ -2,10 +2,6 @@ spring:
   data:
     mongodb:
       database: scratchamap
-  security:
-    user:
-      name: TestUser
-      password: 123456
 server:
   error:
     include-message: always

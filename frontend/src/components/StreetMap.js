@@ -1,6 +1,8 @@
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import styled from "styled-components/macro";
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 let L = window.L;
 
@@ -15,17 +17,25 @@ let nodeIcon = L.icon({
 });
 
 export default function StreetMap() {
+  const { token } = useContext(AuthContext);
+  const { jwtDecoded } = useContext(AuthContext);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   let userMarker = new L.marker([27.380583, 33.631839], { icon: userIcon });
   let nodes = []; //OSM-Nodes
   let markers = []; //OSM-Nodes converted to Markers
   let userBounds = ""; //Area in which the user moves without new nodes being loaded
   let mapBounds = ""; //Area for which the nodes are loaded
   let userInsideBounds = false;
+  let playerPoints = 0;
 
   function getMarkers(map) {
     axios
       .get(
-        `/mapdata/getnodes?sWLat=` +
+        `/api/mapdata/getnodes?sWLat=` +
           mapBounds._southWest.lat +
           `&sWLon=` +
           mapBounds._southWest.lng +
@@ -33,12 +43,7 @@ export default function StreetMap() {
           mapBounds._northEast.lat +
           `&nELon=` +
           mapBounds._northEast.lng,
-        {
-          auth: {
-            username: "TestUser",
-            password: "123456",
-          },
-        }
+        config
       )
       .then((response) => {
         return response.data;
@@ -46,7 +51,7 @@ export default function StreetMap() {
       .then((data) => {
         nodes = data;
         for (let i = 0; i < markers.length; i++) {
-          if (markers[i] !== undefined) {
+          if (markers[i]) {
             map.removeLayer(markers[i]);
           }
         }
@@ -58,6 +63,15 @@ export default function StreetMap() {
           });
           map.addLayer(markers[i]);
         }
+      })
+      .catch((error) => console.log(error));
+  }
+
+  function saveCollectedMarker(collectedMarkers) {
+    axios
+      .post(`/api/mapdata/saveMarker`, { collectedMarkers }, config)
+      .then((response) => {
+        return response.data;
       })
       .catch((error) => console.log(error));
   }
@@ -84,13 +98,40 @@ export default function StreetMap() {
   }
 
   function checkIfUserIsNearMarkers(userLocation, map) {
+    let uncollectedMarkers = [];
+    let collectedMarkers = [];
     for (let i = 0; i < markers.length; i++) {
-      if (markers[i] !== undefined) {
+      //stream machen eventuell markers.filter
+      if (markers[i]) {
         if (map.distance(userLocation.latlng, markers[i].getLatLng()) <= 20) {
           map.removeLayer(markers[i]); //If Marker is closer than 20m, then remove marker
+          //Add Points for Marker
+          playerPoints += 1;
+          //Save Marker(id) in Backend
+          collectedMarkers.push(markers[i]);
+        } else {
+          uncollectedMarkers.push(markers[i]);
         }
       }
     }
+    markers = uncollectedMarkers;
+    if (collectedMarkers.length > 0) {
+      saveCollectedMarker(collectedMarkers);
+      savePoints();
+    }
+  }
+
+  function savePoints() {
+    axios
+      .post(
+        `/api/user/savePoints`,
+        { username: jwtDecoded.sub, points: playerPoints },
+        config
+      )
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => console.log(error));
   }
 
   function GameController() {
@@ -113,7 +154,7 @@ export default function StreetMap() {
 
     setInterval(() => {
       map.locate();
-      console.log("Map Locate used");
+      console.log("Map Locate used"); //Warum wird das immer doppelt aufgerufen?
     }, 10000);
 
     return null;

@@ -8,6 +8,7 @@ import {
   Toolbar,
   Typography,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,7 +28,8 @@ export default function Header() {
         <Toolbar>
           <IconButton
             edge="start"
-            href="/"
+            component={Link}
+            to={"/home"}
             color="inherit"
             aria-label="menu"
             fontSize="large"
@@ -39,9 +41,10 @@ export default function Header() {
           </Typography>
           <IconButton
             edge="end"
-            href="/explore"
             color="inherit"
             aria-label="map"
+            component={Link}
+            to={"/explore"}
           >
             <ExploreIcon fontSize="large" />
           </IconButton>

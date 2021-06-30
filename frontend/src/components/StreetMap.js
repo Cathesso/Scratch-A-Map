@@ -16,7 +16,7 @@ let nodeIcon = L.icon({
   iconSize: [10, 10],
 });
 
-export default function StreetMap() {
+export default function StreetMap({ points }) {
   const { token } = useContext(AuthContext);
   const { jwtDecoded } = useContext(AuthContext);
   const config = {
@@ -30,12 +30,12 @@ export default function StreetMap() {
   let userBounds = ""; //Area in which the user moves without new nodes being loaded
   let mapBounds = ""; //Area for which the nodes are loaded
   let userInsideBounds = false;
-  let playerPoints = 0;
+  let playerPoints = points;
 
   function getMarkers(map) {
-    axios
+    axios //Request Markers from Backend <-- OSM
       .get(
-        `/api/mapdata/getnodes?sWLat=` +
+        `/api/mapData/getNodes?sWLat=` +
           mapBounds._southWest.lat +
           `&sWLon=` +
           mapBounds._southWest.lng +
@@ -57,6 +57,7 @@ export default function StreetMap() {
         }
 
         for (let i = 0; i < nodes.length; i++) {
+          //Map Nodes to Markers
           markers[i] = L.marker([nodes[i].latitude, nodes[i].longitude], {
             icon: nodeIcon,
             key: nodes[i].id,
@@ -67,9 +68,9 @@ export default function StreetMap() {
       .catch((error) => console.log(error));
   }
 
-  function saveCollectedMarker(collectedMarkers) {
+  function saveCollectedNodes(collectedNodes) {
     axios
-      .post(`/api/mapdata/saveMarker`, { collectedMarkers }, config)
+      .post(`/api/mapData/saveNodes`, { collectedNodes }, config)
       .then((response) => {
         return response.data;
       })
@@ -99,7 +100,9 @@ export default function StreetMap() {
 
   function checkIfUserIsNearMarkers(userLocation, map) {
     let uncollectedMarkers = [];
-    let collectedMarkers = [];
+    let collectedNodes = [];
+    let uncollectedNodes = [];
+    //let collectedPoints = points;
     for (let i = 0; i < markers.length; i++) {
       //stream machen eventuell markers.filter
       if (markers[i]) {
@@ -107,21 +110,24 @@ export default function StreetMap() {
           map.removeLayer(markers[i]); //If Marker is closer than 20m, then remove marker
           //Add Points for Marker
           playerPoints += 1;
-          //Save Marker(id) in Backend
-          collectedMarkers.push(markers[i]);
+          //Save Node in Backend
+          collectedNodes.push(nodes[i]);
         } else {
           uncollectedMarkers.push(markers[i]);
+          uncollectedNodes.push(nodes[i]);
         }
       }
     }
     markers = uncollectedMarkers;
-    if (collectedMarkers.length > 0) {
-      saveCollectedMarker(collectedMarkers);
+    nodes = uncollectedNodes;
+    if (collectedNodes.length > 0) {
+      saveCollectedNodes(collectedNodes);
       savePoints();
     }
   }
 
   function savePoints() {
+    console.log(points);
     axios
       .post(
         `/api/user/savePoints`,
@@ -154,7 +160,7 @@ export default function StreetMap() {
 
     setInterval(() => {
       map.locate();
-      console.log("Map Locate used"); //Warum wird das immer doppelt aufgerufen?
+      console.log("Map Locate used"); //Why is this being called twice? I have no idea.
     }, 10000);
 
     return null;

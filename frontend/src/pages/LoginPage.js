@@ -24,11 +24,11 @@ export default function LoginPage() {
       <Form onSubmit={handleSubmit}>
         <div className="canvas">
           <div className="screen">
-            <div className="cursor"></div>
-            <div className="eyes"></div>
-            <div className="mouth"></div>
+            <div className="cursor" />
+            <div className="eyes" />
+            <div className="mouth" />
           </div>
-          <div className="case"></div>
+          <div className="case" />
         </div>
 
         <TextField
@@ -63,6 +63,10 @@ const Wrapper = styled.div`
   display: grid;
   margin: 1%;
   grid-template-columns: 1fr auto 1fr;
+
+  .MuiFormControl-root {
+    margin: 10px 0;
+  }
 
   .canvas {
     --size: 25vmin;
@@ -165,6 +169,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   justify-items: center;
+  align-items: center;
 
   button {
     width: 30%;

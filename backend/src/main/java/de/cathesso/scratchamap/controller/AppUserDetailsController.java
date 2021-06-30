@@ -1,6 +1,5 @@
 package de.cathesso.scratchamap.controller;
 
-import de.cathesso.scratchamap.dto.LoginData;
 import de.cathesso.scratchamap.dto.UserResponseDTO;
 import de.cathesso.scratchamap.model.UserSaveData;
 import de.cathesso.scratchamap.service.UserSaveDataService;

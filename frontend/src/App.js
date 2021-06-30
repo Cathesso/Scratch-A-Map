@@ -5,8 +5,11 @@ import LoginPage from "./pages/LoginPage";
 import Header from "./components/Header";
 import AuthProvider from "./context/AuthProvider";
 import HomePage from "./pages/HomePage";
+import { useState } from "react";
 
 function App() {
+  const [points, setPoints] = useState(0);
+
   return (
     <Wrapper>
       <AuthProvider>
@@ -16,10 +19,10 @@ function App() {
             <LoginPage />
           </Route>
           <Route path={"/home"} exact>
-            <HomePage />
+            <HomePage points={points} setPoints={setPoints} />
           </Route>
           <Route path={"/explore"} exact>
-            <ExplorePage />
+            <ExplorePage points={points} />
           </Route>
         </Switch>
       </AuthProvider>

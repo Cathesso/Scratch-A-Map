@@ -1,12 +1,11 @@
 import styled from "styled-components/macro";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 
-export default function HomePage() {
-  const { token } = useContext(AuthContext);
+export default function HomePage({ points, setPoints }) {
   const { jwtDecoded } = useContext(AuthContext);
-  const [points, setPoints] = useState("");
+  const { token } = useContext(AuthContext);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -14,10 +13,12 @@ export default function HomePage() {
   };
 
   useEffect(() => {
+    //Beim Laden der Seite (nach dem Login) werden die Punkte abgerufen
     axios.get(`/api/user/me`, config).then((response) => {
+      console.log(response.data.points);
       setPoints(response.data.points);
-      return response.data;
-    });
+      //return response.data;
+    }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

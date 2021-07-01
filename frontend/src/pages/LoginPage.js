@@ -3,11 +3,12 @@ import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { Button, TextField } from "@material-ui/core";
 
-export default function LoginPage() {
+export default function LoginPage({ setIsLoggedIn }) {
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
   });
+  setIsLoggedIn(false);
   const { login } = useContext(AuthContext);
 
   const handleChange = (event) => {

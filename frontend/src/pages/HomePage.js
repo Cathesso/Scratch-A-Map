@@ -3,7 +3,7 @@ import { useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
 
-export default function HomePage({ points, setPoints }) {
+export default function HomePage({ points, setPoints, setIsLoggedIn }) {
   const { jwtDecoded } = useContext(AuthContext);
   const { token } = useContext(AuthContext);
   const config = {
@@ -13,6 +13,7 @@ export default function HomePage({ points, setPoints }) {
   };
 
   useEffect(() => {
+    setIsLoggedIn(true);
     //Beim Laden der Seite (nach dem Login) werden die Punkte abgerufen
     axios.get(`/api/user/me`, config).then((response) => {
       console.log(response.data.points);

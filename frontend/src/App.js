@@ -10,20 +10,25 @@ import background from "./img/background.jpg";
 
 function App() {
   const [points, setPoints] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
     <Wrapper>
       <AuthProvider>
-        <Header />
+        <Header isLoggedIn={isLoggedIn} />
         <Switch>
           <Route path={"/"} exact>
-            <LoginPage />
+            <LoginPage setIsLoggedIn={setIsLoggedIn} />
           </Route>
           <Route path={"/home"} exact>
-            <HomePage points={points} setPoints={setPoints} />
+            <HomePage
+              points={points}
+              setPoints={setPoints}
+              setIsLoggedIn={setIsLoggedIn}
+            />
           </Route>
           <Route path={"/explore"} exact>
-            <ExplorePage points={points} />
+            <ExplorePage points={points} setIsLoggedIn={setIsLoggedIn} />
           </Route>
         </Switch>
       </AuthProvider>

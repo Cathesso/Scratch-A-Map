@@ -4,8 +4,7 @@ import AuthContext from "../context/AuthContext";
 import axios from "axios";
 
 export default function HomePage({ points, setPoints, setIsLoggedIn }) {
-  const { jwtDecoded } = useContext(AuthContext);
-  const { token } = useContext(AuthContext);
+  const { jwtDecoded, token } = useContext(AuthContext);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,

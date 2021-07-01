@@ -23,8 +23,10 @@ export default function HomePage({ points, setPoints }) {
 
   return (
     <Wrapper>
-      <div>Hello {jwtDecoded.sub}</div>
-      <div>You have {points} Points</div>
+      <div class="statistics">
+        <h2>Hello {jwtDecoded.sub}</h2>
+        <div>You have {points} Points</div>
+      </div>
     </Wrapper>
   );
 }
@@ -33,6 +35,14 @@ const Wrapper = styled.div`
   height: 100%;
   text-align: center;
   display: grid;
-  grid-template-rows: 1fr 9fr;
-  margin: 1%;
+  margin: 3%;
+  grid-template-columns: 1fr auto 1fr;
+  .statistics {
+    grid-column-start: 2;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    align-items: center;
+  }
 `;

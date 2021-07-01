@@ -61,7 +61,7 @@ const Wrapper = styled.div`
   height: 100%;
   text-align: center;
   display: grid;
-  margin: 1%;
+  margin: 3%;
   grid-template-columns: 1fr auto 1fr;
 
   .MuiFormControl-root {

@@ -1,9 +1,9 @@
 package de.cathesso.scratchamap.repos;
 
-import de.cathesso.scratchamap.model.Node;
+import de.cathesso.scratchamap.model.UserSaveData;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MapDataRepo extends PagingAndSortingRepository<Node, String> {
+public interface UserSaveDataRepo  extends PagingAndSortingRepository<UserSaveData, String> {
 }

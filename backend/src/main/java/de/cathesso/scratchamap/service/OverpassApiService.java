@@ -1,16 +1,14 @@
 package de.cathesso.scratchamap.service;
 
 import de.cathesso.scratchamap.dto.GetMapElementsDTO;
-import de.cathesso.scratchamap.model.Marker;
+import de.cathesso.scratchamap.model.Node;
 import de.cathesso.scratchamap.model.api.OverpassApiElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,15 +29,15 @@ public class OverpassApiService {
         return List.of();
     }
 
-    private Marker mapOverpassNodesToMarkerModel(OverpassApiElement overpassApiElement){
-        return Marker.builder()
+    private Node mapOverpassNodesToMarkerModel(OverpassApiElement overpassApiElement){
+        return Node.builder()
                 .id(overpassApiElement.getId())
                 .latitude(overpassApiElement.getLat())
                 .longitude(overpassApiElement.getLon())
                 .build();
     }
 
-    public List<Marker> getMapNodes(String sWLat, String sWLon, String nELat, String nELon){
+    public List<Node> getMapNodes(String sWLat, String sWLon, String nELat, String nELon){
         return getMapElements(sWLat, sWLon, nELat, nELon).stream().filter(element -> element.getType().equals("node")).map(this::mapOverpassNodesToMarkerModel).collect(Collectors.toList());
     }
 }

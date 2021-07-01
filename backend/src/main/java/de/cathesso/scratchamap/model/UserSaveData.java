@@ -1,5 +1,6 @@
 package de.cathesso.scratchamap.model;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +12,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection="Markers")
-public class Marker {
+@Document(collection="usersavedata")
+public class UserSaveData {
     @Id
-    private String id;
-    private String latitude;
-    private String longitude;
+    private String username;
+    private long points;
 }

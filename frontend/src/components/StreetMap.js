@@ -1,6 +1,8 @@
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import styled from "styled-components/macro";
 import axios from "axios";
+import { useContext } from "react";
+import AuthContext from "../context/AuthContext";
 
 let L = window.L;
 
@@ -14,18 +16,26 @@ let nodeIcon = L.icon({
   iconSize: [10, 10],
 });
 
-export default function StreetMap() {
+export default function StreetMap({ points }) {
+  const { token } = useContext(AuthContext);
+  const { jwtDecoded } = useContext(AuthContext);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
   let userMarker = new L.marker([27.380583, 33.631839], { icon: userIcon });
   let nodes = []; //OSM-Nodes
   let markers = []; //OSM-Nodes converted to Markers
   let userBounds = ""; //Area in which the user moves without new nodes being loaded
   let mapBounds = ""; //Area for which the nodes are loaded
   let userInsideBounds = false;
+  let playerPoints = points;
 
   function getMarkers(map) {
-    axios
+    axios //Request Markers from Backend <-- OSM
       .get(
-        `/mapdata/getnodes?sWLat=` +
+        `/api/mapData/getNodes?sWLat=` +
           mapBounds._southWest.lat +
           `&sWLon=` +
           mapBounds._southWest.lng +
@@ -33,12 +43,7 @@ export default function StreetMap() {
           mapBounds._northEast.lat +
           `&nELon=` +
           mapBounds._northEast.lng,
-        {
-          auth: {
-            username: "TestUser",
-            password: "123456",
-          },
-        }
+        config
       )
       .then((response) => {
         return response.data;
@@ -46,18 +51,28 @@ export default function StreetMap() {
       .then((data) => {
         nodes = data;
         for (let i = 0; i < markers.length; i++) {
-          if (markers[i] !== undefined) {
+          if (markers[i]) {
             map.removeLayer(markers[i]);
           }
         }
 
         for (let i = 0; i < nodes.length; i++) {
+          //Map Nodes to Markers
           markers[i] = L.marker([nodes[i].latitude, nodes[i].longitude], {
             icon: nodeIcon,
             key: nodes[i].id,
           });
           map.addLayer(markers[i]);
         }
+      })
+      .catch((error) => console.log(error));
+  }
+
+  function saveCollectedNodes(collectedNodes) {
+    axios
+      .post(`/api/mapData/saveNodes`, { collectedNodes }, config)
+      .then((response) => {
+        return response.data;
       })
       .catch((error) => console.log(error));
   }
@@ -84,13 +99,45 @@ export default function StreetMap() {
   }
 
   function checkIfUserIsNearMarkers(userLocation, map) {
+    let uncollectedMarkers = [];
+    let collectedNodes = [];
+    let uncollectedNodes = [];
+    //let collectedPoints = points;
     for (let i = 0; i < markers.length; i++) {
-      if (markers[i] !== undefined) {
+      //stream machen eventuell markers.filter
+      if (markers[i]) {
         if (map.distance(userLocation.latlng, markers[i].getLatLng()) <= 20) {
           map.removeLayer(markers[i]); //If Marker is closer than 20m, then remove marker
+          //Add Points for Marker
+          playerPoints += 1;
+          //Save Node in Backend
+          collectedNodes.push(nodes[i]);
+        } else {
+          uncollectedMarkers.push(markers[i]);
+          uncollectedNodes.push(nodes[i]);
         }
       }
     }
+    markers = uncollectedMarkers;
+    nodes = uncollectedNodes;
+    if (collectedNodes.length > 0) {
+      saveCollectedNodes(collectedNodes);
+      savePoints();
+    }
+  }
+
+  function savePoints() {
+    console.log(points);
+    axios
+      .post(
+        `/api/user/savePoints`,
+        { username: jwtDecoded.sub, points: playerPoints },
+        config
+      )
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => console.log(error));
   }
 
   function GameController() {
@@ -113,7 +160,7 @@ export default function StreetMap() {
 
     setInterval(() => {
       map.locate();
-      console.log("Map Locate used");
+      console.log("Map Locate used"); //Why is this being called twice? I have no idea.
     }, 10000);
 
     return null;

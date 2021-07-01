@@ -29,6 +29,23 @@ const theme = createMuiTheme({
       contrastText: "#ffffff",
     },
   },
+  overrides: {
+    MuiInputBase: {
+      input: {
+        color: "rgba(255, 255, 255, 1)",
+      },
+    },
+    MuiInputLabel: {
+      root: {
+        color: "white",
+      },
+    },
+    MuiOutlinedInput: {
+      notchedOutline: {
+        borderColor: "white",
+      },
+    },
+  },
 });
 
 ReactDOM.render(

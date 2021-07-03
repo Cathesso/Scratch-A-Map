@@ -39,6 +39,8 @@ export default function GameController({ points, setIsLoading, useMap }) {
     map.locate();
     map.on("locationfound", onLocationFound);
     map.on("locationerror", onLocationError);
+    if (timer) {
+    } //just to temporary ignore the error of unused variable. Need to work out how to stop the timer on React Page Change.
     setTimer(
       setInterval(() => {
         map.locate();
@@ -46,7 +48,7 @@ export default function GameController({ points, setIsLoading, useMap }) {
         map.on("locationfound", onLocationFound);
         map.on("locationerror", onLocationError);
       }, 10000)
-    );
+    ); //eslint-disable-line react-hooks/exhaustive-deps
   }, []); //When page is loaded: Locate Player + Set Timer
 
   useEffect(() => {
@@ -59,7 +61,7 @@ export default function GameController({ points, setIsLoading, useMap }) {
       } else {
         checkIfPlayerIsNearMarkers();
       }
-    }
+    } //eslint-disable-line react-hooks/exhaustive-deps
   }, [playerLocation]); //When PlayerLocation changed: Check Bounds / Markers
 
   useEffect(() => {
@@ -67,7 +69,7 @@ export default function GameController({ points, setIsLoading, useMap }) {
     if (mapBounds && boundsLoaded) {
       loadNodesFromBackend();
       setBoundsLoaded(false);
-    }
+    } //eslint-disable-line react-hooks/exhaustive-deps
   }, [boundsLoaded]); //When mapBounds set: Load Nodes
 
   useEffect(() => {
@@ -79,7 +81,7 @@ export default function GameController({ points, setIsLoading, useMap }) {
       } else {
         createMarkers();
       }
-    }
+    } //eslint-disable-line react-hooks/exhaustive-deps
   }, [nodesLoaded]); //When new nodes loaded: Create Markers
 
   useEffect(() => {
@@ -87,7 +89,7 @@ export default function GameController({ points, setIsLoading, useMap }) {
     if (markers && markersLoaded) {
       markers.map((marker) => map.addLayer(marker));
       setMarkersLoaded(false);
-    }
+    } //eslint-disable-line react-hooks/exhaustive-deps
   }, [markersLoaded]); //When Markers created: Add to Map
 
   function savePlayerPoints() {

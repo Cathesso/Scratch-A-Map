@@ -48,8 +48,9 @@ export default function GameController({ points, setIsLoading, useMap }) {
         map.on("locationfound", onLocationFound);
         map.on("locationerror", onLocationError);
       }, 10000)
-    ); //eslint-disable-line react-hooks/exhaustive-deps
-  }, []); //When page is loaded: Locate Player + Set Timer
+    );
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
+  // When page is loaded: Locate Player + Set Timer
 
   useEffect(() => {
     console.log("Use-Effect: playerLocation");
@@ -61,16 +62,18 @@ export default function GameController({ points, setIsLoading, useMap }) {
       } else {
         checkIfPlayerIsNearMarkers();
       }
-    } //eslint-disable-line react-hooks/exhaustive-deps
-  }, [playerLocation]); //When PlayerLocation changed: Check Bounds / Markers
+    }
+  }, [playerLocation]); //eslint-disable-line react-hooks/exhaustive-deps
+  // When PlayerLocation changed: Check Bounds / Markers
 
   useEffect(() => {
     console.log("Use-Effect: mapBounds");
     if (mapBounds && boundsLoaded) {
       loadNodesFromBackend();
       setBoundsLoaded(false);
-    } //eslint-disable-line react-hooks/exhaustive-deps
-  }, [boundsLoaded]); //When mapBounds set: Load Nodes
+    }
+  }, [boundsLoaded]); //eslint-disable-line react-hooks/exhaustive-deps
+  // When mapBounds set: Load Nodes
 
   useEffect(() => {
     console.log("Use-Effect: nodesLoaded");
@@ -81,16 +84,18 @@ export default function GameController({ points, setIsLoading, useMap }) {
       } else {
         createMarkers();
       }
-    } //eslint-disable-line react-hooks/exhaustive-deps
-  }, [nodesLoaded]); //When new nodes loaded: Create Markers
+    }
+  }, [nodesLoaded]); //eslint-disable-line react-hooks/exhaustive-deps
+  // When new nodes loaded: Create Markers
 
   useEffect(() => {
     console.log("Use-Effect: markersLoaded");
     if (markers && markersLoaded) {
       markers.map((marker) => map.addLayer(marker));
       setMarkersLoaded(false);
-    } //eslint-disable-line react-hooks/exhaustive-deps
-  }, [markersLoaded]); //When Markers created: Add to Map
+    }
+  }, [markersLoaded]); //eslint-disable-line react-hooks/exhaustive-deps
+  // When Markers created: Add to Map
 
   function savePlayerPoints() {
     console.log("Function: savePlayerPoints");

@@ -7,15 +7,17 @@ import AuthProvider from "./context/AuthProvider";
 import HomePage from "./pages/HomePage";
 import { useState } from "react";
 import background from "./img/background.jpg";
+import Computer from "./components/Computer";
 
 function App() {
   const [points, setPoints] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <Wrapper>
       <AuthProvider>
-        <Header isLoggedIn={isLoggedIn} />
+        <Header isLoggedIn={isLoggedIn} isLoading={isLoading} />
         <Switch>
           <Route path={"/"} exact>
             <LoginPage setIsLoggedIn={setIsLoggedIn} />
@@ -28,9 +30,14 @@ function App() {
             />
           </Route>
           <Route path={"/explore"} exact>
-            <ExplorePage points={points} setIsLoggedIn={setIsLoggedIn} />
+            <ExplorePage points={points} setIsLoading={setIsLoading} />
           </Route>
         </Switch>
+        {isLoading && (
+          <Loader>
+            <Computer />
+          </Loader>
+        )}
       </AuthProvider>
     </Wrapper>
   );
@@ -47,4 +54,15 @@ const Wrapper = styled.div`
   background-size: cover;
   display: flex;
   flex-direction: column;
+`;
+
+const Loader = styled.div`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  bottom: 0px;
 `;

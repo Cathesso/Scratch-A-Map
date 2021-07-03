@@ -1,16 +1,22 @@
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
+import coin from "../img/coin.png";
+import explorer from "../img/explorer.png";
 
 let L = window.L;
 let userIcon = L.icon({
-  iconUrl: "https://image.flaticon.com/icons/png/128/1223/1223505.png",
+  iconUrl: explorer,
+  iconRetinaUrl: explorer,
   iconSize: [64, 64],
 });
+
 const nodeIcon = L.icon({
-  iconUrl: "https://image.flaticon.com/icons/png/128/2/2013.png",
-  iconSize: [10, 10],
+  iconUrl: coin,
+  iconRetinaUrl: coin,
+  iconSize: [32, 32],
 });
+
 let userMarker = new L.marker([27.380583, 33.631839], { icon: userIcon });
 
 export default function GameController({ points, setIsLoading, useMap }) {
@@ -97,54 +103,49 @@ export default function GameController({ points, setIsLoading, useMap }) {
   }, [markersLoaded]); //eslint-disable-line react-hooks/exhaustive-deps
   // When Markers created: Add to Map
 
-  function savePlayerPoints() {
-    console.log("Function: savePlayerPoints");
-    axios
-      .post(
-        `/api/user/savePoints`,
-        { username: jwtDecoded.sub, points: playerPoints },
-        config
-      )
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => console.log(error));
+  function onLocationFound(userLocation) {
+    console.log("Function: onLocationFound");
+    setPlayerLocation(userLocation);
+    map.removeLayer(userMarker); //remove prior userMarker
+    userMarker = new L.marker(userLocation.latlng, { icon: userIcon }); //create new userMarker
+    map.addLayer(userMarker); //add new userMarker to App
+    map.panTo(userLocation.latlng, 20); //Go to User
+    map.setZoom(20);
   }
 
-  function saveCollectedNodes(collectedNodes) {
-    console.log("Function: saveCollectedNodes");
-    axios
-      .post(`/api/mapData/saveNodes`, { collectedNodes }, config)
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => console.log(error));
+  function onLocationError(error) {
+    console.log("Function: onLocationError");
+    alert(error.message);
   }
 
-  function removeMarkersFromMap() {
-    console.log("Function: removeMarkersFromMap");
-    if (markers.length > 0) {
-      for (let i = 0; i < markers.length; i++) {
-        if (markers[i]) {
-          map.removeLayer(markers[i]);
-        }
-      }
+  function loadMapBounds() {
+    console.log("Function: loadMapBounds");
+    function getMapBounds() {
+      map.setZoom(16);
+      return map.getBounds();
     }
-    setMarkers(null);
+    function getPlayerBounds() {
+      map.setZoom(18);
+      return map.getBounds();
+    }
+    setMapBounds(getMapBounds());
+    setPlayerBounds(getPlayerBounds());
+    //Werden die Sachen wirklich geladen? --> Create Rectangle an den Bounds
+    setBoundsLoaded(true);
   }
 
-  function createMarkers() {
-    console.log("Function: createMarkers");
-    setMarkersLoaded(false);
-    let tempMarkers = [];
-    for (let i = 0; i < nodes.length; i++) {
-      tempMarkers[i] = L.marker([nodes[i].latitude, nodes[i].longitude], {
-        icon: nodeIcon,
-        key: nodes[i].id,
-      });
+  function checkIfPlayerIsWithinBounds() {
+    console.log("Function: checkIfPlayerIsWithinBounds");
+    if (
+      playerLocation.latlng.lat > playerBounds._northEast.lat ||
+      playerLocation.latlng.lat < playerBounds._southWest.lat ||
+      playerLocation.latlng.lng > playerBounds._northEast.lng ||
+      playerLocation.latlng.lng < playerBounds._southWest.lng
+    ) {
+      return false;
+    } else {
+      return true;
     }
-    setMarkers(tempMarkers);
-    setMarkersLoaded(true);
   }
 
   function loadNodesFromBackend() {
@@ -176,34 +177,30 @@ export default function GameController({ points, setIsLoading, useMap }) {
       });
   }
 
-  function checkIfPlayerIsWithinBounds() {
-    console.log("Function: checkIfPlayerIsWithinBounds");
-    if (
-      playerLocation.latlng.lat > playerBounds._northEast.lat ||
-      playerLocation.latlng.lat < playerBounds._southWest.lat ||
-      playerLocation.latlng.lng > playerBounds._northEast.lng ||
-      playerLocation.latlng.lng < playerBounds._southWest.lng
-    ) {
-      return false;
-    } else {
-      return true;
+  function removeMarkersFromMap() {
+    console.log("Function: removeMarkersFromMap");
+    if (markers.length > 0) {
+      for (let i = 0; i < markers.length; i++) {
+        if (markers[i]) {
+          map.removeLayer(markers[i]);
+        }
+      }
     }
+    setMarkers(null);
   }
 
-  function loadMapBounds() {
-    console.log("Function: loadMapBounds");
-    function getMapBounds() {
-      map.setZoom(16);
-      return map.getBounds();
+  function createMarkers() {
+    console.log("Function: createMarkers");
+    setMarkersLoaded(false);
+    let tempMarkers = [];
+    for (let i = 0; i < nodes.length; i++) {
+      tempMarkers[i] = L.marker([nodes[i].latitude, nodes[i].longitude], {
+        icon: nodeIcon,
+        key: nodes[i].id,
+      });
     }
-    function getPlayerBounds() {
-      map.setZoom(18);
-      return map.getBounds();
-    }
-    setMapBounds(getMapBounds());
-    setPlayerBounds(getPlayerBounds());
-    //Werden die Sachen wirklich geladen? --> Create Rectangle an den Bounds
-    setBoundsLoaded(true);
+    setMarkers(tempMarkers);
+    setMarkersLoaded(true);
   }
 
   function checkIfPlayerIsNearMarkers() {
@@ -239,19 +236,28 @@ export default function GameController({ points, setIsLoading, useMap }) {
     }
   }
 
-  function onLocationFound(userLocation) {
-    console.log("Function: onLocationFound");
-    setPlayerLocation(userLocation);
-    map.removeLayer(userMarker); //remove prior userMarker
-    userMarker = new L.marker(userLocation.latlng, { icon: userIcon }); //create new userMarker
-    map.addLayer(userMarker); //add new userMarker to App
-    map.panTo(userLocation.latlng, 20); //Go to User
-    map.setZoom(20);
+  function savePlayerPoints() {
+    console.log("Function: savePlayerPoints");
+    axios
+      .post(
+        `/api/user/savePoints`,
+        { username: jwtDecoded.sub, points: playerPoints },
+        config
+      )
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => console.log(error));
   }
 
-  function onLocationError(error) {
-    console.log("Function: onLocationError");
-    alert(error.message);
+  function saveCollectedNodes(collectedNodes) {
+    console.log("Function: saveCollectedNodes");
+    axios
+      .post(`/api/mapData/saveNodes`, { collectedNodes }, config)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => console.log(error));
   }
 
   return null;

@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import styled from "styled-components/macro";
 import GameController from "./GameController";
 
-export default function StreetMap({ points, setIsLoading, coin }) {
+export default function StreetMap({ points, setIsLoading }) {
   return (
     <Wrapper>
       <MapContainer
@@ -14,7 +14,6 @@ export default function StreetMap({ points, setIsLoading, coin }) {
           points={points}
           setIsLoading={setIsLoading}
           useMap={useMap}
-          coin={coin}
         />
 
         <TileLayer

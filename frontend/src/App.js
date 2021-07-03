@@ -7,7 +7,6 @@ import AuthProvider from "./context/AuthProvider";
 import HomePage from "./pages/HomePage";
 import { useState } from "react";
 import background from "./img/background.jpg";
-import coin from "./img/coin.png";
 import Computer from "./components/Computer";
 
 function App() {
@@ -31,11 +30,7 @@ function App() {
             />
           </Route>
           <Route path={"/explore"} exact>
-            <ExplorePage
-              points={points}
-              setIsLoading={setIsLoading}
-              coin={coin}
-            />
+            <ExplorePage points={points} setIsLoading={setIsLoading} />
           </Route>
         </Switch>
         {isLoading && (

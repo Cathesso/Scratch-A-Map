@@ -1,10 +1,10 @@
 import styled from "styled-components/macro";
 import StreetMap from "../components/StreetMap";
 
-export default function ExplorePage({ points, setIsLoading, coin }) {
+export default function ExplorePage({ points, setIsLoading }) {
   return (
     <Wrapper>
-      <StreetMap points={points} setIsLoading={setIsLoading} coin={coin} />
+      <StreetMap points={points} setIsLoading={setIsLoading} />
     </Wrapper>
   );
 }

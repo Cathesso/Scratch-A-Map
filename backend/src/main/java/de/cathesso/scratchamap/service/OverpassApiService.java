@@ -2,6 +2,7 @@ package de.cathesso.scratchamap.service;
 
 import de.cathesso.scratchamap.dto.GetMapElementsDTO;
 import de.cathesso.scratchamap.model.Node;
+import de.cathesso.scratchamap.model.Way;
 import de.cathesso.scratchamap.model.api.OverpassApiElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +30,29 @@ public class OverpassApiService {
         return List.of();
     }
 
-    private Node mapOverpassNodesToMarkerModel(OverpassApiElement overpassApiElement){
+    private Node mapOverpassElementsToNodeModel(OverpassApiElement overpassApiElement){
         return Node.builder()
                 .id(overpassApiElement.getId())
-                .latitude(overpassApiElement.getLat())
-                .longitude(overpassApiElement.getLon())
+                .latitude(Double.parseDouble(overpassApiElement.getLat()))
+                .longitude(Double.parseDouble(overpassApiElement.getLon()))
+                .nodeType("OverpassNode")
                 .build();
     }
 
-    public List<Node> getMapNodes(String sWLat, String sWLon, String nELat, String nELon){
-        return getMapElements(sWLat, sWLon, nELat, nELon).stream().filter(element -> element.getType().equals("node")).map(this::mapOverpassNodesToMarkerModel).collect(Collectors.toList());
+    private Way mapOverpassElementsToWayModel(OverpassApiElement overpassApiElement){
+        return Way.builder()
+                .id(overpassApiElement.getId())
+                .nodes(overpassApiElement.getNodes())
+                .build();
     }
+
+    public List<Node> getMapNodes(List<OverpassApiElement> mapElements){
+        return mapElements.stream().filter(element -> element.getType().equals("node")).map(this::mapOverpassElementsToNodeModel).collect(Collectors.toList());
+    }
+
+    public List<Way> getMapWays(List<OverpassApiElement> mapElements){
+        return mapElements.stream().filter(element -> element.getType().equals("way")).map(this::mapOverpassElementsToWayModel).collect(Collectors.toList());
+    }
+
+
 }

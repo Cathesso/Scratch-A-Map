@@ -23,13 +23,12 @@ export default function LoginPage({ setIsLoggedIn }) {
 
   return (
     <Wrapper>
-      <div class="centerpiece">
+      <div className="centerpiece">
         <Form onSubmit={handleSubmit}>
           <Computer />
 
           <TextField
             label="Username"
-            defaultValue="Username"
             variant="outlined"
             name="username"
             onChange={handleChange}
@@ -38,7 +37,6 @@ export default function LoginPage({ setIsLoggedIn }) {
 
           <TextField
             label="Password"
-            defaultValue="password"
             variant="outlined"
             type="password"
             name="password"
@@ -91,20 +89,3 @@ const Form = styled.form`
     width: 30%;
   }
 `;
-
-/*
-.login{
- padding:2em;
- width: min(30rem,80%);
- min-height:150px;
- display:flex;
- flex-direction:column;
- justify-content:center;
-
-background: rgba( 5, 0, 0, 0.35 );
-box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-backdrop-filter: blur( 9.5px );
--webkit-backdrop-filter: blur( 9.5px );
-border-radius: 10px;
-border: 1px solid rgba( 255, 255, 255, 0.18 );
-*/

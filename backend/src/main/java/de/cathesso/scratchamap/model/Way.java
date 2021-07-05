@@ -7,18 +7,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection="nodes")
-public class Node {
+@Document(collection="ways")
+public class Way {
     @Id
     private String id;
-    private double latitude;
-    private double longitude;
-    private String nodeType;
-    private List<String> collectedByUser;
+    private List<String> nodes;
+    //private HashMap<String, String> tags;
 }

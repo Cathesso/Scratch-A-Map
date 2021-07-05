@@ -11,6 +11,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MarkersDTO {
+public class NodesDTO {
     private List<Node> collectedNodes;
 }

@@ -9,6 +9,7 @@ import { useState } from "react";
 import background from "./img/background.jpg";
 import Computer from "./components/Computer";
 import PrivateRoute from "./routing/PrivateRoute";
+import AboutPage from "./pages/AboutPage";
 
 function App() {
   const [points, setPoints] = useState(0);
@@ -33,6 +34,9 @@ function App() {
           <PrivateRoute path={"/explore"} exact>
             <ExplorePage points={points} setIsLoading={setIsLoading} />
           </PrivateRoute>
+          <PrivateRoute path={"/about"} exact>
+            <AboutPage />
+          </PrivateRoute>
         </Switch>
         {isLoading && (
           <Loader>
@@ -50,7 +54,7 @@ const Wrapper = styled.div`
   margin: 0;
   height: 100%;
   width: 100vw;
-  background-color: "rgb(#6b9b37)";
+  background-color: #6b9b37;
   background-image: url(${background});
   background-size: cover;
   display: flex;

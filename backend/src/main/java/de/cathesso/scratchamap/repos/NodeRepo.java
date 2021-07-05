@@ -5,5 +5,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface MapDataRepo extends PagingAndSortingRepository<Node, String> {
+public interface NodeRepo extends PagingAndSortingRepository<Node, String> {
 }

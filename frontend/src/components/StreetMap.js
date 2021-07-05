@@ -30,4 +30,32 @@ const Wrapper = styled.div`
   .leaflet-container {
     height: 100%;
   }
+
+  .my-transition {
+    top: 0;
+    opacity: 1;
+    position: absolute;
+    -webkit-transition: top 0.25s cubic-bezier(0, 0, 0.25, 1),
+      opacity 0.25s cubic-bezier(0, 0, 0.25, 1);
+    -moz-transition: top 0.25s cubic-bezier(0, 0, 0.25, 1),
+      opacity 0.25s cubic-bezier(0, 0, 0.25, 1);
+    -o-transition: top 0.25s cubic-bezier(0, 0, 0.25, 1),
+      opacity 0.25s cubic-bezier(0, 0, 0.25, 1);
+    transition: top 0.25s cubic-bezier(0, 0, 0.25, 1),
+      opacity 0.25s cubic-bezier(0, 0, 0.25, 1);
+  }
+  .my-transition-enter {
+    top: -4px;
+    opacity: 0.01;
+  }
+  .my-transition-leave,
+  .my-transition-leave-active {
+    -webkit-transition: opacity 0.7s cubic-bezier(0, 0, 0.25, 1);
+    -moz-transition: opacity 0.7s cubic-bezier(0, 0, 0.25, 1);
+    -o-transition: opacity 0.7s cubic-bezier(0, 0, 0.25, 1);
+    transition: opacity 0.7s cubic-bezier(0, 0, 0.25, 1);
+  }
+  .my-transition-leave-active {
+    opacity: 0.01;
+  }
 `;

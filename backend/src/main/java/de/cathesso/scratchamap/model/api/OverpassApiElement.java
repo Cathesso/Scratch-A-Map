@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,6 +15,6 @@ public class OverpassApiElement {
     private String id;
     private String lat;
     private String lon;
-    private String[] nodes;
+    private List<String> nodes;
     private HashMap<String, String> tags;
 }

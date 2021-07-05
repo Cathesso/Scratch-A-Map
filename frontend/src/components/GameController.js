@@ -3,8 +3,9 @@ import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import coin from "../img/coin.png";
 import explorer from "../img/explorer.png";
+import treasureChest from "../img/treasure-chest.png";
+import L from "leaflet";
 
-let L = window.L;
 let userIcon = L.icon({
   iconUrl: explorer,
   iconRetinaUrl: explorer,
@@ -17,7 +18,13 @@ const nodeIcon = L.icon({
   iconSize: [32, 32],
 });
 
-let userMarker = new L.marker([27.380583, 33.631839], { icon: userIcon });
+const samNodeIcon = L.icon({
+  iconUrl: treasureChest,
+  iconRetinaUrl: treasureChest,
+  iconSize: [32, 32],
+});
+
+let userMarker = L.marker([27.380583, 33.631839], { icon: userIcon });
 
 export default function GameController({ points, setIsLoading, useMap }) {
   const { token } = useContext(AuthContext);
@@ -36,7 +43,6 @@ export default function GameController({ points, setIsLoading, useMap }) {
   const [boundsLoaded, setBoundsLoaded] = useState(null);
   const [playerLocation, setPlayerLocation] = useState(null);
   const [nodesLoaded, setNodesLoaded] = useState(false);
-  const [timer, setTimer] = useState(null);
   const { jwtDecoded } = useContext(AuthContext);
 
   useEffect(() => {
@@ -45,16 +51,24 @@ export default function GameController({ points, setIsLoading, useMap }) {
     map.locate();
     map.on("locationfound", onLocationFound);
     map.on("locationerror", onLocationError);
-    if (timer) {
-    } //just to temporary ignore the error of unused variable. Need to work out how to stop the timer on React Page Change.
-    setTimer(
-      setInterval(() => {
-        map.locate();
-        console.log("Map Locate-Timer used");
-        map.on("locationfound", onLocationFound);
-        map.on("locationerror", onLocationError);
-      }, 10000)
-    );
+
+    const timer = setInterval(() => {
+      map.locate();
+      console.log("Map Locate-Timer used");
+      map.on("locationfound", onLocationFound);
+      map.on("locationerror", onLocationError);
+    }, 10000);
+    return () => {
+      clearInterval(timer);
+      setNodes(null);
+      setMarkers(null);
+      setMarkersLoaded(false);
+      setPlayerBounds(false);
+      setMapBounds(null);
+      setBoundsLoaded(null);
+      setPlayerLocation(null);
+      setNodesLoaded(false);
+    };
   }, []); //eslint-disable-line react-hooks/exhaustive-deps
   // When page is loaded: Locate Player + Set Timer
 
@@ -106,10 +120,11 @@ export default function GameController({ points, setIsLoading, useMap }) {
   function onLocationFound(userLocation) {
     console.log("Function: onLocationFound");
     setPlayerLocation(userLocation);
-    map.removeLayer(userMarker); //remove prior userMarker
-    userMarker = new L.marker(userLocation.latlng, { icon: userIcon }); //create new userMarker
-    map.addLayer(userMarker); //add new userMarker to App
-    map.panTo(userLocation.latlng, 20); //Go to User
+    map.removeLayer(userMarker);
+    //setUserMarker(L.marker(userLocation.latlng, { icon: userIcon }));
+    userMarker = L.marker(userLocation.latlng, { icon: userIcon });
+    map.addLayer(userMarker);
+    map.panTo(userLocation.latlng, 20);
     map.setZoom(20);
   }
 
@@ -130,7 +145,6 @@ export default function GameController({ points, setIsLoading, useMap }) {
     }
     setMapBounds(getMapBounds());
     setPlayerBounds(getPlayerBounds());
-    //Werden die Sachen wirklich geladen? --> Create Rectangle an den Bounds
     setBoundsLoaded(true);
   }
 
@@ -194,10 +208,17 @@ export default function GameController({ points, setIsLoading, useMap }) {
     setMarkersLoaded(false);
     let tempMarkers = [];
     for (let i = 0; i < nodes.length; i++) {
-      tempMarkers[i] = L.marker([nodes[i].latitude, nodes[i].longitude], {
-        icon: nodeIcon,
-        key: nodes[i].id,
-      });
+      if (nodes[i].nodeType === "scratchAMapNode") {
+        tempMarkers[i] = L.marker([nodes[i].latitude, nodes[i].longitude], {
+          icon: samNodeIcon,
+          key: nodes[i].id,
+        });
+      } else {
+        tempMarkers[i] = L.marker([nodes[i].latitude, nodes[i].longitude], {
+          icon: nodeIcon,
+          key: nodes[i].id,
+        });
+      }
     }
     setMarkers(tempMarkers);
     setMarkersLoaded(true);
@@ -209,11 +230,11 @@ export default function GameController({ points, setIsLoading, useMap }) {
       let uncollectedMarkers = [];
       let uncollectedNodes = [];
       let collectedNodes = [];
+
       for (let i = 0; i < markers.length; i++) {
-        //stream machen eventuell markers.filter
         if (markers[i]) {
           if (
-            map.distance(playerLocation.latlng, markers[i].getLatLng()) <= 20
+            map.distance(playerLocation.latlng, markers[i].getLatLng()) <= 50
           ) {
             console.log("Try to remove Marker");
             map.removeLayer(markers[i]); //If Marker is closer than 20m, then remove marker
@@ -226,7 +247,7 @@ export default function GameController({ points, setIsLoading, useMap }) {
             uncollectedNodes.push(nodes[i]);
           }
         }
-      }
+      } //END
       setMarkers(uncollectedMarkers);
       setNodes(uncollectedNodes);
       if (collectedNodes.length > 0) {

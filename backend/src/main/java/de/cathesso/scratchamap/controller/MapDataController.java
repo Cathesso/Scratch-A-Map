@@ -1,6 +1,6 @@
 package de.cathesso.scratchamap.controller;
 
-import de.cathesso.scratchamap.dto.MarkersDTO;
+import de.cathesso.scratchamap.dto.NodesDTO;
 import de.cathesso.scratchamap.model.Node;
 import de.cathesso.scratchamap.service.MapDataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +19,13 @@ public class MapDataController {
     public MapDataController(MapDataService mapDataService){this.mapDataService = mapDataService;}
 
     @GetMapping("getNodes")
-    public List<Node> getMarkers(@RequestParam String sWLat, String sWLon, String nELat, String nELon){
-        return mapDataService.getMarkers(sWLat,sWLon,nELat,nELon);
+    public List<Node> getNodes(Principal principal, @RequestParam String sWLat, String sWLon, String nELat, String nELon){
+        return mapDataService.getNodes(principal, sWLat,sWLon,nELat,nELon);
     }
 
     @PostMapping("saveNodes")
-    public void saveMarker (Principal principal, @RequestBody MarkersDTO collectedNodes) {
-        mapDataService.saveMarker(principal, collectedNodes.getCollectedNodes());
+    public void saveCollectedNodes(Principal principal, @RequestBody NodesDTO collectedNodes) {
+        mapDataService.saveCollectedNodes(principal, collectedNodes.getCollectedNodes());
     }
 
 }

@@ -8,6 +8,7 @@ import HomePage from "./pages/HomePage";
 import { useState } from "react";
 import background from "./img/background.jpg";
 import Computer from "./components/Computer";
+import PrivateRoute from "./routing/PrivateRoute";
 
 function App() {
   const [points, setPoints] = useState(0);
@@ -22,16 +23,16 @@ function App() {
           <Route path={"/"} exact>
             <LoginPage setIsLoggedIn={setIsLoggedIn} />
           </Route>
-          <Route path={"/home"} exact>
+          <PrivateRoute path={"/home"} exact>
             <HomePage
               points={points}
               setPoints={setPoints}
               setIsLoggedIn={setIsLoggedIn}
             />
-          </Route>
-          <Route path={"/explore"} exact>
+          </PrivateRoute>
+          <PrivateRoute path={"/explore"} exact>
             <ExplorePage points={points} setIsLoading={setIsLoading} />
-          </Route>
+          </PrivateRoute>
         </Switch>
         {isLoading && (
           <Loader>
@@ -49,7 +50,7 @@ const Wrapper = styled.div`
   margin: 0;
   height: 100%;
   width: 100vw;
-  background-color: hotpink;
+  background-color: "rgb(#6b9b37)";
   background-image: url(${background});
   background-size: cover;
   display: flex;

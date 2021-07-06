@@ -50,20 +50,20 @@ export default function Header({ isLoggedIn }) {
                     variant="contained"
                     color="primary"
                     component={Link}
-                    to="/"
+                    to="/about"
                   >
-                    Login
+                    About
                   </Button>
                 </li>
                 <li>
                   <Button
                     fullWidth={true}
                     variant="contained"
-                    color="primary"
+                    color="secondary"
                     component={Link}
-                    to="/about"
+                    to="/"
                   >
-                    About
+                    Logout
                   </Button>
                 </li>
               </ul>
@@ -109,7 +109,7 @@ const Wrapper = styled.div`
     position: absolute;
     cursor: pointer;
     opacity: 0;
-    z-index:  9998;
+    z-index: 9998;
   }
 
   #menuToggle .menuline {

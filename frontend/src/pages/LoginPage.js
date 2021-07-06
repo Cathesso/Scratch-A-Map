@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { Button, TextField } from "@material-ui/core";
 import Computer from "../components/Computer";
+import { Link } from "react-router-dom";
 
 export default function LoginPage({ setIsLoggedIn }) {
   const [credentials, setCredentials] = useState({
@@ -47,6 +48,16 @@ export default function LoginPage({ setIsLoggedIn }) {
             Login
           </Button>
         </Form>
+        <Button
+          className="registerButton"
+          fullWidth={true}
+          variant="contained"
+          color="secondary"
+          component={Link}
+          to="/register"
+        >
+          Register
+        </Button>
       </div>
     </Wrapper>
   );
@@ -58,6 +69,10 @@ const Wrapper = styled.div`
   display: grid;
   margin: 3%;
   grid-template-columns: 1fr auto 1fr;
+
+  .registerButton {
+    margin: 10px 0;
+  }
 
   .MuiFormControl-root {
     margin: 10px 0;
@@ -84,8 +99,4 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   padding: 10px;
-
-  button {
-    width: 30%;
-  }
 `;

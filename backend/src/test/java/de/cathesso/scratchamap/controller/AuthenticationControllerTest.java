@@ -1,6 +1,6 @@
 package de.cathesso.scratchamap.controller;
 
-import de.cathesso.scratchamap.dto.LoginData;
+import de.cathesso.scratchamap.dto.AuthentificationDataDTO;
 import de.cathesso.scratchamap.security.model.AppUser;
 import de.cathesso.scratchamap.security.repository.AppUserRepo;
 import io.jsonwebtoken.Claims;
@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = "jwt.secret=some-jwt-secret")
-class LoginControllerTest {
+class AuthenticationControllerTest {
     @LocalServerPort
     private int port;
 
@@ -43,8 +43,8 @@ class LoginControllerTest {
                 .build());
 
         //WHEN
-        LoginData loginData = new LoginData("AUserForTesting", "APasswordForTesting");
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/auth/login", loginData, String.class);
+        AuthentificationDataDTO authentificationDataDTO = new AuthentificationDataDTO("AUserForTesting", "APasswordForTesting");
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/auth/login", authentificationDataDTO, String.class);
 
         //THEN
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
@@ -61,8 +61,8 @@ class LoginControllerTest {
                 .build());
 
         //WHEN
-        LoginData loginData = new LoginData("AUserForTesting", "IncorrectPassword");
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/auth/login", loginData, String.class);
+        AuthentificationDataDTO authentificationDataDTO = new AuthentificationDataDTO("AUserForTesting", "IncorrectPassword");
+        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:" + port + "/auth/login", authentificationDataDTO, String.class);
 
         //THEN
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));

@@ -15,7 +15,6 @@ import java.util.HashMap;
 public class JwtUtilsService {
     @Value("${jwt.secret:}")
     private String secret;
-    //private String secret = "some-secret";
 
     public String createToken(HashMap<String, Object> claims, String subject) {
 

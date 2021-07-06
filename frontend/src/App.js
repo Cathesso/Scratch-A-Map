@@ -10,6 +10,7 @@ import background from "./img/background.jpg";
 import Computer from "./components/Computer";
 import PrivateRoute from "./routing/PrivateRoute";
 import AboutPage from "./pages/AboutPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
   const [points, setPoints] = useState(0);
@@ -23,6 +24,9 @@ function App() {
         <Switch>
           <Route path={"/"} exact>
             <LoginPage setIsLoggedIn={setIsLoggedIn} />
+          </Route>
+          <Route path={"/register"} exact>
+            <RegisterPage setIsLoggedIn={setIsLoggedIn} />
           </Route>
           <PrivateRoute path={"/home"} exact>
             <HomePage

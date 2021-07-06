@@ -15,6 +15,10 @@ function App() {
   const [points, setPoints] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [gameLocation, setGameLocation] = useState(null);
+  const [exploredGameLocation, setExploredGameLocation] = useState(null);
+  const [widerArea, setWiderArea] = useState(null);
+  const [exploredWiderArea, setExploredWiderArea] = useState(null);
 
   return (
     <Wrapper>
@@ -29,6 +33,10 @@ function App() {
               points={points}
               setPoints={setPoints}
               setIsLoggedIn={setIsLoggedIn}
+              gameLocation={gameLocation}
+              exploredGameLocation={exploredGameLocation}
+              widerArea={widerArea}
+              exploredWiderArea={exploredWiderArea}
             />
           </PrivateRoute>
           <PrivateRoute path={"/explore"} exact>

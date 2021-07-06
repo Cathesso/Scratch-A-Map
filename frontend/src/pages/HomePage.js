@@ -2,8 +2,17 @@ import styled from "styled-components/macro";
 import { useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
+import { LinearProgress } from "@material-ui/core";
 
-export default function HomePage({ points, setPoints, setIsLoggedIn }) {
+export default function HomePage({
+  points,
+  setPoints,
+  setIsLoggedIn,
+  gameLocation,
+  exploredGameLocation,
+  widerArea,
+  exploredWiderArea,
+}) {
   const { jwtDecoded, token } = useContext(AuthContext);
   const config = {
     headers: {
@@ -13,11 +22,9 @@ export default function HomePage({ points, setPoints, setIsLoggedIn }) {
 
   useEffect(() => {
     setIsLoggedIn(true);
-    //Beim Laden der Seite (nach dem Login) werden die Punkte abgerufen
     axios.get(`/api/user/me`, config).then((response) => {
       console.log(response.data.points);
       setPoints(response.data.points);
-      //return response.data;
     }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -28,6 +35,22 @@ export default function HomePage({ points, setPoints, setIsLoggedIn }) {
           <h2>Hello {jwtDecoded.sub}</h2>
           <div>You have {points} Points</div>
         </div>
+        {gameLocation && (
+          <div className="statistics">
+            <div>You are currently in {gameLocation}</div>
+            <div>
+              Explored here:
+              <LinearProgress
+                variant="determinate"
+                value={exploredGameLocation}
+              />
+            </div>
+            <div>
+              Explored in Area of {widerArea}:
+              <LinearProgress variant="determinate" value={exploredWiderArea} />
+            </div>
+          </div>
+        )}
       </div>
     </Wrapper>
   );
@@ -58,5 +81,6 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     padding: 10px;
+    margin: 5px;
   }
 `;

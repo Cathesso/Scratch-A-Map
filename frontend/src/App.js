@@ -36,7 +36,11 @@ function App() {
             />
           </PrivateRoute>
           <PrivateRoute path={"/explore"} exact>
-            <ExplorePage points={points} setIsLoading={setIsLoading} />
+            <ExplorePage
+              points={points}
+              setIsLoading={setIsLoading}
+              setPoints={setPoints}
+            />
           </PrivateRoute>
           <PrivateRoute path={"/about"} exact>
             <AboutPage />

@@ -1,5 +1,5 @@
 import styled from "styled-components/macro";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { Button, TextField } from "@material-ui/core";
 import Computer from "../components/Computer";

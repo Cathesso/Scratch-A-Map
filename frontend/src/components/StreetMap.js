@@ -2,17 +2,19 @@ import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import styled from "styled-components/macro";
 import GameController from "./GameController";
 
-export default function StreetMap({ points, setIsLoading }) {
+export default function StreetMap({ points, setIsLoading, setPoints }) {
   return (
     <Wrapper>
+      <PointDisplay>Points collected: {points}</PointDisplay>
       <MapContainer
         center={[27.380583, 33.631839]}
-        zoom={16}
+        zoom={20}
         scrollWheelZoom={true}
       >
         <GameController
           points={points}
           setIsLoading={setIsLoading}
+          setPoints={setPoints}
           useMap={useMap}
         />
 
@@ -58,4 +60,10 @@ const Wrapper = styled.div`
   .my-transition-leave-active {
     opacity: 0.01;
   }
+`;
+
+const PointDisplay = styled.div`
+  position: absolute;
+  right: 0;
+  z-index: 9999;
 `;

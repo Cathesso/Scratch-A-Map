@@ -32,12 +32,10 @@ public class MapDataService {
     }
 
     public List<Node> getNodes(Principal principal, String sWLat, String sWLon, String nELat, String nELon){
-        //Explanation: Nodes are all points from Overpass. Markers are all points that are to be shown (Overpass + future own generated points).
-        //private List<Marker> userMarkers = userRepo.existsById(user.username);
         List<OverpassApiElement> mapElements = apiService.getMapElements(sWLat, sWLon, nELat, nELon);
         List<Node> allNodesFromOverpass = apiService.getMapNodes(mapElements);
         List<Way> nodelessWaysFromOverpass = apiService.getMapWays(mapElements).stream()
-                .filter(element -> (element.getNodes().size() == 2)) //filter if way has more or less than two nodes
+                .filter(element -> (element.getNodes().size() == 2))
                 .collect(Collectors.toList());
 
         List<Way> nodelessWaysThatHaveAlreadyBeenProcessed = nodelessWaysFromOverpass.stream()
@@ -58,10 +56,6 @@ public class MapDataService {
         allNodesWithinBoundary.addAll(selfCreatedNodesForWaysWithoutNodes);
         allNodesWithinBoundary.addAll(alreadySelfCreatedNodes);
         allNodesWithinBoundary.addAll(allNodesFromOverpass);
-        /*allNodesWithinBoundary.forEach((node)->{
-            Optional<Node> dBMarker = nodeRepo.findById(node.getId());//.stream().filter(); <- Hier noch User filtern
-            dBMarker.ifPresentOrElse((savedMarker) ->{}, () -> uncollectedNodes.add(node));
-        });*/
         allNodesWithinBoundary.stream().forEach(node -> {
             Optional<Node> nodeInRepository = nodeRepo.findById(node.getId());
             nodeInRepository.ifPresentOrElse(
@@ -70,8 +64,6 @@ public class MapDataService {
                         }, ()->{uncollectedNodes.add(node);});
         });
 
-        //alreadySelfCreatedNodes.stream().forEach(node -> uncollectedNodes.add(node));
-        //selfCreatedNodesForWaysWithoutNodes.stream().forEach(node -> uncollectedNodes);
         return uncollectedNodes;
     }
 
@@ -111,7 +103,7 @@ public class MapDataService {
                 createdNodesForWay.add(nodeID);
             }
             else{
-                int numberOfNodesToCreate = (int) (wayLength / 20); //z.B. 50/20 = 2
+                int numberOfNodesToCreate = (int) (wayLength / 20);
                 double latLength = firstNodeLat - secondNodeLat;
                 double lonLength = firstNodeLon - secondNodeLon;
                 double latPartLength = latLength / numberOfNodesToCreate;

@@ -5,7 +5,6 @@ import coin from "../img/coin.png";
 import explorer from "../img/explorer.png";
 import treasureChest from "../img/treasure-chest.png";
 import L from "leaflet";
-import styled from "styled-components/macro";
 
 let userIcon = L.icon({
   iconUrl: explorer,

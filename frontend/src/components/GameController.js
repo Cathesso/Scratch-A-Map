@@ -148,7 +148,7 @@ export default function GameController({
     if (playerLocation) {
       map.setZoom(20);
       setMapBounds(getBoundsForWiderArea(7));
-      setPlayerBounds(getBoundsForWiderArea(6));
+      setPlayerBounds(getBoundsForWiderArea(5));
       setAllBoundsLoaded(true);
     }
   }

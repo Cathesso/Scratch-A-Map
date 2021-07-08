@@ -7,7 +7,7 @@ import AuthProvider from "./context/AuthProvider";
 import HomePage from "./pages/HomePage";
 import { useState } from "react";
 import background from "./img/background.jpg";
-import Computer from "./components/Computer";
+import SaMLoadingSpinnerAndMascot from "./components/SaMLoadingSpinnerAndMascot";
 import PrivateRoute from "./routing/PrivateRoute";
 import AboutPage from "./pages/AboutPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -36,7 +36,11 @@ function App() {
             />
           </PrivateRoute>
           <PrivateRoute path={"/explore"} exact>
-            <ExplorePage points={points} setIsLoading={setIsLoading} />
+            <ExplorePage
+              points={points}
+              setIsLoading={setIsLoading}
+              setPoints={setPoints}
+            />
           </PrivateRoute>
           <PrivateRoute path={"/about"} exact>
             <AboutPage />
@@ -44,7 +48,7 @@ function App() {
         </Switch>
         {isLoading && (
           <Loader>
-            <Computer />
+            <SaMLoadingSpinnerAndMascot message={"Calculating area ..."} />
           </Loader>
         )}
       </AuthProvider>

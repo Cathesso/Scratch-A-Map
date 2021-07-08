@@ -13,11 +13,8 @@ export default function HomePage({ points, setPoints, setIsLoggedIn }) {
 
   useEffect(() => {
     setIsLoggedIn(true);
-    //Beim Laden der Seite (nach dem Login) werden die Punkte abgerufen
     axios.get(`/api/user/me`, config).then((response) => {
-      console.log(response.data.points);
       setPoints(response.data.points);
-      //return response.data;
     }); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

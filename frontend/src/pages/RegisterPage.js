@@ -1,8 +1,8 @@
 import styled from "styled-components/macro";
 import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../context/AuthContext";
-import { Button, FormHelperText, TextField } from "@material-ui/core";
-import Computer from "../components/Computer";
+import { Button, TextField } from "@material-ui/core";
+import SaMLoadingSpinnerAndMascot from "../components/SaMLoadingSpinnerAndMascot";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
@@ -12,16 +12,16 @@ export default function RegisterPage({ setIsLoggedIn }) {
     password: "",
     passwordChecked: "",
   });
-  const [passwordIsNotCorrect, setPasswordIsNotCorrect] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("Please register below");
+  const [passwordIsNotCorrect, setPasswordIsNotCorrect] = useState();
   const [
     passwordCheckIsNotTheSameAsPassword,
     setPasswordCheckIsNotTheSameAsPassword,
-  ] = useState(true);
+  ] = useState();
   setIsLoggedIn(false);
   const { register } = useContext(AuthContext);
   const timerId = useRef(0);
-  const [usernameAlreadyRegistered, setUsernameAlreadyRegistered] =
-    useState(false);
+  const [usernameAlreadyRegistered, setUsernameAlreadyRegistered] = useState();
 
   const handleChange = (event) => {
     setRegisterCredentials({
@@ -44,15 +44,47 @@ export default function RegisterPage({ setIsLoggedIn }) {
     if (registerCredentials.password !== "") {
       checkPassword(registerCredentials.password);
     }
-    if (
-      registerCredentials.passwordChecked !== "" &&
-      registerCredentials.passwordChecked === registerCredentials.password
-    ) {
-      setPasswordCheckIsNotTheSameAsPassword(false);
-    } else {
-      setPasswordCheckIsNotTheSameAsPassword(true);
+    if (registerCredentials.passwordChecked !== "") {
+      if (
+        registerCredentials.passwordChecked !== "" &&
+        registerCredentials.passwordChecked === registerCredentials.password
+      ) {
+        setPasswordCheckIsNotTheSameAsPassword(false);
+      } else {
+        setPasswordCheckIsNotTheSameAsPassword(true);
+      }
     }
   }, [registerCredentials]); //eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (usernameAlreadyRegistered !== undefined) {
+      if (usernameAlreadyRegistered) {
+        setErrorMessage("Username already taken :C");
+      } else {
+        setErrorMessage("Great username! :)");
+      }
+    }
+  }, [usernameAlreadyRegistered]);
+
+  useEffect(() => {
+    if (passwordIsNotCorrect !== undefined) {
+      if (passwordIsNotCorrect) {
+        setErrorMessage("You need a more secure password. :0");
+      } else {
+        setErrorMessage("This password is perfect! :)");
+      }
+    }
+  }, [passwordIsNotCorrect]);
+
+  useEffect(() => {
+    if (passwordCheckIsNotTheSameAsPassword !== undefined) {
+      if (passwordCheckIsNotTheSameAsPassword) {
+        setErrorMessage("The passwords don't match yet.");
+      } else {
+        setErrorMessage("Perfect!");
+      }
+    }
+  }, [passwordCheckIsNotTheSameAsPassword]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -65,7 +97,9 @@ export default function RegisterPage({ setIsLoggedIn }) {
     ) {
       register(registerCredentials);
     } else {
-      alert("There is something wrong with your chosen Username or Password");
+      setErrorMessage(
+        "There is something wrong \n with your chosen username and/or password"
+      );
     }
   };
 
@@ -83,7 +117,7 @@ export default function RegisterPage({ setIsLoggedIn }) {
     <Wrapper>
       <div className="centerpiece">
         <Form onSubmit={handleSubmit}>
-          <Computer />
+          <SaMLoadingSpinnerAndMascot message={errorMessage} />
 
           <TextField
             label="Username"
@@ -95,12 +129,6 @@ export default function RegisterPage({ setIsLoggedIn }) {
             value={registerCredentials.username}
           />
 
-          {usernameAlreadyRegistered && (
-            <FormHelperText variant="outlined" margin="dense">
-              Username already taken :C
-            </FormHelperText>
-          )}
-
           <TextField
             label="Enter a Password"
             fullWidth={true}
@@ -110,8 +138,11 @@ export default function RegisterPage({ setIsLoggedIn }) {
             error={passwordIsNotCorrect}
             onChange={handleChange}
             value={registerCredentials.password}
-            helperText="Please use 8-50 charakters and at least one uppercase, lowercase, numeric and special character."
           />
+          <p>
+            (8-50 charakters and at least one uppercase, lowercase, numeric and
+            special character)
+          </p>
 
           <TextField
             label="Reenter Password"
@@ -183,4 +214,8 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   padding: 10px;
+  p {
+    margin: 0;
+    font-size: small;
+  }
 `;

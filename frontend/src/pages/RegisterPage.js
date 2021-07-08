@@ -58,7 +58,7 @@ export default function RegisterPage({ setIsLoggedIn }) {
 
   useEffect(() => {
     if (usernameAlreadyRegistered !== undefined) {
-      if (usernameAlreadyRegistered === true) {
+      if (usernameAlreadyRegistered) {
         setErrorMessage("Username already taken :C");
       } else {
         setErrorMessage("Great username! :)");
@@ -68,7 +68,7 @@ export default function RegisterPage({ setIsLoggedIn }) {
 
   useEffect(() => {
     if (passwordIsNotCorrect !== undefined) {
-      if (passwordIsNotCorrect === true) {
+      if (passwordIsNotCorrect) {
         setErrorMessage("You need a more secure password. :0");
       } else {
         setErrorMessage("This password is perfect! :)");
@@ -78,7 +78,7 @@ export default function RegisterPage({ setIsLoggedIn }) {
 
   useEffect(() => {
     if (passwordCheckIsNotTheSameAsPassword !== undefined) {
-      if (passwordCheckIsNotTheSameAsPassword === true) {
+      if (passwordCheckIsNotTheSameAsPassword) {
         setErrorMessage("The passwords don't match yet.");
       } else {
         setErrorMessage("Perfect!");

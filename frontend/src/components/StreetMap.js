@@ -6,11 +6,7 @@ export default function StreetMap({ points, setIsLoading, setPoints }) {
   return (
     <Wrapper>
       <PointDisplay>Points collected: {points}</PointDisplay>
-      <MapContainer
-        center={[27.380583, 33.631839]}
-        zoom={20}
-        scrollWheelZoom={true}
-      >
+      <MapContainer zoom={20} scrollWheelZoom={true}>
         <GameController
           points={points}
           setIsLoading={setIsLoading}

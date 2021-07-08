@@ -1,19 +1,67 @@
 import styled from "styled-components/macro";
 
-export default function Computer() {
+export default function SaMLoadingSpinnerAndMascot({ message }) {
   return (
-    <Wrapper>
-      <div className="screen">
-        <div className="cursor" />
-        <div className="eyes" />
-        <div className="mouth" />
-      </div>
-      <div className="case" />
-    </Wrapper>
+    <SaM>
+      <Canvas>
+        <div className="screen">
+          <div className="cursor" />
+          <div className="eyes" />
+          <div className="mouth" />
+        </div>
+        <div className="case" />
+      </Canvas>
+      {message && (
+        <SaMMessage>
+          <div>
+            {message.split("\n").map((msg, index) => {
+              return (
+                <span key={index}>
+                  {msg}
+                  <br />
+                </span>
+              );
+            })}
+          </div>
+        </SaMMessage>
+      )}
+    </SaM>
   );
 }
 
-const Wrapper = styled.div`
+const SaM = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const SaMMessage = styled.div`
+  div {
+    color: #6b9b37;
+    position: relative;
+    background-color: #fff;
+    padding: 1.125em 1.5em;
+    border-radius: 1rem;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3),
+      0 0.0625rem 0.125rem rgba(0, 0, 0, 0.2);
+  }
+
+  div::before {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    bottom: 100%;
+    right: 20%; // offset should move with padding of parent
+    border: 0.75rem solid transparent;
+    border-top: none;
+    border-bottom-color: #fff;
+    filter: drop-shadow(0 -0.0625rem 0.0625rem rgba(0, 0, 0, 0.1));
+  }
+`;
+
+const Canvas = styled.div`
   --size: 25vmin;
   width: var(--size);
   height: var(--size);

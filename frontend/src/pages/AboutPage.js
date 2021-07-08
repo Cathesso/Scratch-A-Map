@@ -1,4 +1,5 @@
 import styled from "styled-components/macro";
+import { Link } from "@material-ui/core";
 
 export default function AboutPage() {
   return (
@@ -8,16 +9,52 @@ export default function AboutPage() {
           <ul>
             <li>
               Map-Icons made by{" "}
-              <a href="https://www.freepik.com" title="Freepik">
-                Freepik
-              </a>{" "}
+              <Link
+                href="https://www.freepik.com"
+                title="Freepik"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Freepik{" "}
+              </Link>
               from{" "}
-              <a href="https://www.flaticon.com/" title="Flaticon">
-                www.flaticon.com
-              </a>
+              <Link
+                href="https://www.flaticon.com/"
+                title="Flaticon"
+                target="_blank"
+                rel="noreferrer"
+              >
+                FlatIcon
+              </Link>
             </li>
-            <li>Background: Photo by Peter Nguyen on Unsplash</li>
-            <li>Side-Menu: https://codepen.io/shieldsma91/pen/zLpbLX</li>
+            <li>
+              Background:{" "}
+              <Link
+                href="https://unsplash.com/@dariuszsankowski?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Dariusz Sankowski
+              </Link>{" "}
+              on{" "}
+              <Link
+                href="https://unsplash.com/s/photos/map?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Unsplash
+              </Link>
+            </li>
+            <li>
+              Side-Menu: Mel Shields on{" "}
+              <Link
+                href="https://codepen.io/shieldsma91/pen/zLpbLX"
+                target="_blank"
+                rel="noreferrer"
+              >
+                CodePen
+              </Link>
+            </li>
           </ul>
         </Info>
       </div>
@@ -56,4 +93,5 @@ const Info = styled.div`
   flex-direction: column;
   text-align: left;
   padding: 10px;
+  text-decoration: none;
 `;

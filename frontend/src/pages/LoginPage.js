@@ -2,7 +2,7 @@ import styled from "styled-components/macro";
 import { useContext, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import { Button, TextField } from "@material-ui/core";
-import Computer from "../components/Computer";
+import SaMLoadingSpinnerAndMascot from "../components/SaMLoadingSpinnerAndMascot";
 import { Link } from "react-router-dom";
 
 export default function LoginPage({ setIsLoggedIn }) {
@@ -26,7 +26,11 @@ export default function LoginPage({ setIsLoggedIn }) {
     <Wrapper>
       <div className="centerpiece">
         <Form onSubmit={handleSubmit}>
-          <Computer />
+          <SaMLoadingSpinnerAndMascot
+            message={
+              "Hey, I'm SaM. \n Please log in or register \n to explore the world!"
+            }
+          />
 
           <TextField
             label="Username"

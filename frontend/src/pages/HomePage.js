@@ -21,7 +21,7 @@ export default function HomePage({ points, setPoints, setIsLoggedIn }) {
     axios.get(`/api/user/stats`, config).then((response) => {
       setPlayers(response.data);
     });
-  }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Wrapper>

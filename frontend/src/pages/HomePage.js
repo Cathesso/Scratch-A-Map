@@ -1,10 +1,12 @@
 import styled from "styled-components/macro";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../context/AuthContext";
 import axios from "axios";
+import SaMLoadingSpinnerAndMascot from "../components/SaMLoadingSpinnerAndMascot";
 
 export default function HomePage({ points, setPoints, setIsLoggedIn }) {
   const { jwtDecoded, token } = useContext(AuthContext);
+  const [players, setPlayers] = useState([]);
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -15,16 +17,30 @@ export default function HomePage({ points, setPoints, setIsLoggedIn }) {
     setIsLoggedIn(true);
     axios.get(`/api/user/me`, config).then((response) => {
       setPoints(response.data.points);
-    }); // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    });
+    axios.get(`/api/user/stats`, config).then((response) => {
+      setPlayers(response.data);
+    });
+  }, []); //eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Wrapper>
       <div className="centerpiece">
         <div className="statistics">
+          <SaMLoadingSpinnerAndMascot />
           <h2>Hello {jwtDecoded.sub}</h2>
           <div>You have {points} Points</div>
         </div>
+        {players && (
+          <div className="statistics">
+            <h2>These are the top Players:</h2>
+            {players.map((player) => (
+              <span key={player.username}>
+                {player.username} - {player.points} points
+              </span>
+            ))}
+          </div>
+        )}
       </div>
     </Wrapper>
   );
@@ -55,5 +71,20 @@ const Wrapper = styled.div`
     justify-content: center;
     align-items: center;
     padding: 10px;
+    margin: 10px;
+    span {
+      margin: 3px;
+      width: 100%;
+      text-align: center;
+    }
+    span:first-of-type:before {
+      content: "👑 ";
+    }
+    span:nth-of-type(2):before {
+      content: "🔎 ";
+    }
+    span:nth-of-type(3):before {
+      content: "🤓 ";
+    }
   }
 `;

@@ -215,7 +215,7 @@ const Form = styled.form`
   align-items: center;
   padding: 10px;
   p {
-  margin: 0;
-  font-size 0.25 em;
+    margin: 0;
+    font-size: small;
   }
 `;

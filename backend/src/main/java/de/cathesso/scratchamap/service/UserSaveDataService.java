@@ -1,9 +1,13 @@
 package de.cathesso.scratchamap.service;
 
+import de.cathesso.scratchamap.dto.UserResponseDTO;
 import de.cathesso.scratchamap.model.UserSaveData;
 import de.cathesso.scratchamap.repos.UserSaveDataRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserSaveDataService {
@@ -22,4 +26,7 @@ public class UserSaveDataService {
         userSaveDataRepo.save(userSaveData);
     }
 
+    public Iterable<UserSaveData> getPlayers() {
+        return userSaveDataRepo.findAll(Sort.by("points").descending());
+    }
 }

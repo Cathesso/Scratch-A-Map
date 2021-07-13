@@ -29,7 +29,7 @@ public class AppUserDetailsController {
     }
 
     @GetMapping("stats")
-    public List<UserResponseDTO> getPlayers (){
+    public List<UserResponseDTO> getPlayersStats(){
         Iterable<UserSaveData> allPlayers = userSaveDataService.getPlayers();
         List<UserResponseDTO> response = new ArrayList<>();
         allPlayers.forEach(player -> {response.add(new UserResponseDTO(player.getUsername(), player.getPoints()));});

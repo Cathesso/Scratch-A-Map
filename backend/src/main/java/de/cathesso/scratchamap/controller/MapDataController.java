@@ -20,12 +20,14 @@ public class MapDataController {
 
     @GetMapping("getNodes")
     public List<Node> getNodes(Principal principal, @RequestParam String sWLat, String sWLon, String nELat, String nELon){
-        return mapDataService.getNodes(principal, sWLat,sWLon,nELat,nELon);
+        String username = principal.getName();
+        return mapDataService.getNodes(username, sWLat,sWLon,nELat,nELon);
     }
 
     @PostMapping("saveNodes")
     public void saveCollectedNodes(Principal principal, @RequestBody NodesDTO collectedNodes) {
-        mapDataService.saveCollectedNodes(principal, collectedNodes.getCollectedNodes());
+        String username = principal.getName();
+        mapDataService.saveCollectedNodes(username, collectedNodes.getCollectedNodes());
     }
 
 }

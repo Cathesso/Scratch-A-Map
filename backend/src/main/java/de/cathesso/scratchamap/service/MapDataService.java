@@ -9,7 +9,6 @@ import de.cathesso.scratchamap.utils.IdUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class MapDataService {
-
     private final OverpassApiService apiService;
     private final NodeRepo nodeRepo;
     private final WayRepo wayRepo;
@@ -31,7 +29,7 @@ public class MapDataService {
         this.idUtils = idUtils;
     }
 
-    public List<Node> getNodes(Principal principal, String sWLat, String sWLon, String nELat, String nELon){
+    public List<Node> getNodes(String username, String sWLat, String sWLon, String nELat, String nELon){
         List<OverpassApiElement> mapElements = apiService.getMapElements(sWLat, sWLon, nELat, nELon);
         List<Node> allNodesFromOverpass = apiService.getMapNodes(mapElements);
         List<Way> nodelessWaysFromOverpass = apiService.getMapWays(mapElements).stream()
@@ -60,22 +58,22 @@ public class MapDataService {
             Optional<Node> nodeInRepository = nodeRepo.findById(node.getId());
             nodeInRepository.ifPresentOrElse(
                     nodeInRepo -> {
-                        if(!(nodeInRepo.getCollectedByUser().contains(principal.getName()))){uncollectedNodes.add(node);}
+                        if(!(nodeInRepo.getCollectedByUser().contains(username))){uncollectedNodes.add(node);}
                         }, ()->{uncollectedNodes.add(node);});
         });
 
         return uncollectedNodes;
     }
 
-    public void saveCollectedNodes(Principal principal, List<Node> collectedNodes) {
+    public void saveCollectedNodes(String username, List<Node> collectedNodes) {
         collectedNodes.forEach(node -> {
                     Optional<Node> dBMarker = nodeRepo.findById(node.getId());
                     dBMarker.ifPresentOrElse((savedMarker) -> {
                         List<String> collectedByUsers = savedMarker.getCollectedByUser();
-                        collectedByUsers.add(principal.getName());
+                        collectedByUsers.add(username);
                         savedMarker.setCollectedByUser(collectedByUsers);
                         nodeRepo.save(savedMarker);
-                        }, () -> {node.setCollectedByUser(List.of(principal.getName()));
+                        }, () -> {node.setCollectedByUser(List.of(username));
                     nodeRepo.save(node);});
                     });
     }

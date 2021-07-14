@@ -1,6 +1,6 @@
 # Scratch-a-Map
 Project for a tool / game that lets you explore streets and places of interest near you.  
-Live version: http://scratchamap.herokuapp.com/login 
+Live version: https://scratchamap.herokuapp.com/ 
 
 ## Tools used:
 ### Frontend:
